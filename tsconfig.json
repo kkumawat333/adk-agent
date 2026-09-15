@@ -8,5 +8,11 @@
       "skipLibCheck": true,
       // set to false to allow CommonJS module syntax:
       "verbatimModuleSyntax": false
-    }
+    },
+    // Only the root ADK agents belong to this project. The CDK app under
+    // agentcore/cdk/ has its own tsconfig; excluding it here stops this config
+    // from claiming those files (which caused phantom "Cannot find name
+    // 'process'/'path'" errors in the IDE against the wrong project).
+    "include": ["*.ts"],
+    "exclude": ["node_modules", "agentcore", "**/dist"]
   }
