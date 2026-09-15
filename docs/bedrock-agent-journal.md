@@ -31,6 +31,24 @@ deployed on Bedrock AgentCore. Newest entries at the top.
 
 ## Timeline
 
+### 2026-09-15 — AWS account ID moved out of committed config into `.env`
+
+**Change: account ID is now an env var injected at CDK synth time.**
+- `agentcore/aws-targets.json` keeps the committed `000000000000` placeholder
+  (must stay 12 digits — schema `@regex ^[0-9]{12}$` in
+  `agentcore/.llm-context/aws-targets.ts`, so a `${VAR}` string can't live in
+  the JSON).
+- Added `AWS_ACCOUNT_ID` to `.env` (real, git-ignored) and `.env.example`
+  (placeholder `123456789012`).
+- `agentcore/cdk/bin/cdk.ts`: `main()` calls `process.loadEnvFile(<root>/.env)`
+  when `AWS_ACCOUNT_ID` isn't already set (existing env vars win); new
+  `resolveAccount()` prefers `process.env.AWS_ACCOUNT_ID` over the JSON value,
+  and throws a clear error if it's missing, still the placeholder, or not 12
+  digits.
+- Net effect: the real account ID lives only in the local `.env` and is never
+  committed. Verified `tsc --noEmit` passes and the resolver accepts a valid
+  env value while rejecting the placeholder / invalid input.
+
 ### 2026-09-15 — Prepared repo for public GitHub publish (security hardening)
 
 **Decision: publish to a personal GitHub repo, scrubbed of internal identifiers.**

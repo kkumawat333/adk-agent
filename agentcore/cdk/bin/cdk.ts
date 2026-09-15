@@ -5,9 +5,34 @@ import { App, type Environment } from 'aws-cdk-lib';
 import * as path from 'path';
 import * as fs from 'fs';
 
+// Placeholder account committed to aws-targets.json. The real 12-digit account
+// ID is never committed — it comes from the AWS_ACCOUNT_ID env var (see .env /
+// .env.example), so it stays out of version control.
+const PLACEHOLDER_ACCOUNT = '000000000000';
+
+function resolveAccount(target: AwsDeploymentTarget): string {
+  const fromEnv = process.env.AWS_ACCOUNT_ID?.trim();
+  const account = fromEnv || target.account;
+
+  if (!account || account === PLACEHOLDER_ACCOUNT) {
+    throw new Error(
+      `No AWS account ID resolved for target "${target.name}". ` +
+        `Set AWS_ACCOUNT_ID in your .env (it is injected here at synth time), ` +
+        `or replace the "${PLACEHOLDER_ACCOUNT}" placeholder in agentcore/aws-targets.json.`
+    );
+  }
+  if (!/^[0-9]{12}$/.test(account)) {
+    throw new Error(
+      `AWS account ID "${account}" for target "${target.name}" is invalid — ` +
+        `it must be exactly 12 digits. Check AWS_ACCOUNT_ID in your .env.`
+    );
+  }
+  return account;
+}
+
 function toEnvironment(target: AwsDeploymentTarget): Environment {
   return {
-    account: target.account,
+    account: resolveAccount(target),
     region: target.region,
   };
 }
@@ -23,6 +48,22 @@ function toStackName(projectName: string, targetName: string): string {
 async function main() {
   // Config root is parent of cdk/ directory. The CLI sets process.cwd() to agentcore/cdk/.
   const configRoot = path.resolve(process.cwd(), '..');
+
+  // The real AWS account ID is not committed; it lives in the project-root .env
+  // (git-ignored) as AWS_ACCOUNT_ID and is injected into the aws-targets.json
+  // placeholder at synth time (see resolveAccount). If it isn't already in the
+  // environment, load it from the root .env here. Existing env vars win, so a
+  // shell-exported AWS_ACCOUNT_ID is never overridden.
+  if (!process.env.AWS_ACCOUNT_ID) {
+    const rootEnv = path.resolve(configRoot, '..', '.env');
+    try {
+      if (fs.existsSync(rootEnv)) {
+        process.loadEnvFile(rootEnv);
+      }
+    } catch {
+      // Best-effort: fall back to whatever is already in the environment.
+    }
+  }
   const configIO = new ConfigIO({ baseDir: configRoot });
 
   const spec = await configIO.readProjectSpec();
