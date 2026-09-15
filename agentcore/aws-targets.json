@@ -1,0 +1,8 @@
+[
+  {
+    "name": "default",
+    "description": "AWS deployment target for AgentCore. Set account/region for your own AWS account. The region must have CDKToolkit bootstrapped and Bedrock model access enabled.",
+    "account": "000000000000",
+    "region": "us-east-1"
+  }
+]

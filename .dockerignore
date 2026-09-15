@@ -1,0 +1,27 @@
+# Dependencies are reinstalled inside the image via `npm ci`.
+node_modules
+
+# AgentCore project config + CDK app — not needed inside the runtime image.
+agentcore
+
+# Secrets and local env — never bake into the image.
+.env
+.env.*
+
+# Version control / editor / tooling.
+.git
+.gitignore
+.cursor
+.dockerignore
+Dockerfile
+
+# Runtime-generated artifacts and local docs — not needed at runtime.
+bug-plans
+specs
+feature-specs
+docs
+*.log
+
+# Local-only helpers not used by the deployed runtime.
+preflight.mjs
+replay.*.json

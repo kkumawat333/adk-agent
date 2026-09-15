@@ -1,0 +1,39 @@
+{
+  "name": "adk-agent",
+  "version": "1.0.0",
+  "description": "Google ADK (TypeScript) agents running on Amazon Bedrock via a custom BaseLlm connector, deployable to Bedrock AgentCore Runtime.",
+  "type": "module",
+  "main": "agent.ts",
+  "scripts": {
+    "preflight": "node --env-file=.env preflight.mjs",
+    "agent:city": "adk run agent.ts",
+    "agent:bugfix": "adk run bug_agent.ts",
+    "agent:planner": "adk run planner_agent.ts",
+    "runtime": "node --env-file=.env --import tsx agentcore_runtime.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "google-adk",
+    "adk",
+    "amazon-bedrock",
+    "bedrock",
+    "agentcore",
+    "llm",
+    "ai-agent",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.1124.0",
+    "@google/adk": "^2.0.0",
+    "bedrock-agentcore": "^0.3.0",
+    "tsx": "^4.23.13",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@google/adk-devtools": "^2.0.0",
+    "typescript": "^5.6.0"
+  }
+}

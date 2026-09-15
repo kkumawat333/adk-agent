@@ -1,0 +1,37 @@
+# --- Dependencies ---
+node_modules/
+**/node_modules/
+
+# --- Secrets & local env (NEVER commit) ---
+# .env holds a real Gemini API key + AWS profile details. Only .env.example is committed.
+.env
+.env.*
+!.env.example
+agentcore/.env.local
+
+# --- Build / tooling artifacts ---
+dist/
+**/dist/
+*.tsbuildinfo
+
+# --- CDK build artifacts (may embed account IDs / asset hashes) ---
+agentcore/cdk/cdk.out/
+**/cdk.out/
+.cdk.staging/
+
+# --- AgentCore CLI internals & logs (logs contain account IDs / request data) ---
+agentcore/.cli/logs/
+agentcore/.cli/*
+!agentcore/.cli/deployed-state.json
+
+# --- Runtime-generated artifacts (created by agent tools at runtime) ---
+# spec-runner skill demo
+specs/
+# feature-intake agent
+feature-specs/
+# bug_fixer agent
+bug-plans/
+
+# --- Logs & misc ---
+*.log
+.DS_Store

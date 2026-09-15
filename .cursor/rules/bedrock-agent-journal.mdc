@@ -1,0 +1,47 @@
+---
+description: Keep the Bedrock agent build journal up to date after every discovery or plan change
+alwaysApply: true
+---
+
+# Maintain the Bedrock Agent Build Journal
+
+While working on this ADK-on-Bedrock agent, keep `docs/bedrock-agent-journal.md`
+current. It is a **human-readable** record of how the agent is being built.
+
+## When to update
+
+Update the journal in the **same turn** as any of these:
+
+- A **discovery** (something learned about ADK, Bedrock, the AWS SDK, an error, a
+  constraint, or how a piece works).
+- A **decision** (choosing an approach, library, model, or config).
+- A **change in plan** (abandoning or reworking a prior approach).
+- A **notable change** to `bedrock_llm.ts`, `agent.ts`, or `.env`.
+
+Do not wait to be asked. If nothing meaningful changed, don't add noise.
+
+## How to update
+
+- Add a dated entry at the **top of the `## Timeline`** section
+  (`### YYYY-MM-DD — short title`), with terse bullets: what happened and why.
+- Keep the **`Current state`** summary and **`Open questions / TODO`** in sync
+  (check off or add items).
+- Write for a human reader: plain language, no unexplained jargon, note the
+  *reasoning*, not just the *what*.
+
+## Always cite sources
+
+Whenever a discovery, example, or decision came from an external source (docs,
+GitHub, blog, npm, Stack Overflow, web search, etc.):
+
+- Include the **full URL** inline in the relevant timeline bullet.
+- Also add/keep it in the **`## Sources / references`** section of the journal,
+  with a one-line note on *what it backed up*.
+- If a claim came from reading local files (e.g. `node_modules` type defs), say
+  so explicitly instead of leaving it unsourced.
+- Never present a borrowed example as original — always leave a link back.
+
+## Style
+
+- Prefer short bullets over prose. Link sources when a claim came from the web.
+- Be honest about uncertainty (e.g. "compiles but not live-tested").
